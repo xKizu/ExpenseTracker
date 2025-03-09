@@ -3,6 +3,15 @@
 Simple Expense Tracker 
 
 
+# Installation
+
+```ruby
+git clone https://github.com/xKizu/ExpenseTracker.git
+cd ExpenseTracker
+```
+
+
+
 # Usage
 ```sh
  python expense-tracker.py add --description "Lunch" --amount 20
