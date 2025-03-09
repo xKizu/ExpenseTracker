@@ -19,9 +19,27 @@ def load_expenses():
 
 
 def add_expense(description, amount):
+    if amount <= 0:
+        print("Amount must be [bold green]greater[/bold green] than 0.")
+        return
+    
+    try:
+        amount = float(amount)
+        if round(amount, 2) != amount:
+            raise ValueError("Amount must have at most two decimal places.")
+    except ValueError as e:
+        print(f"[bold red]{e}[/bold red]")
+        return
+    
     expenses = load_expenses()
+
+    if len(expenses) == 0:
+        expense_id = 1
+    else:
+        expense_id = expenses[-1]['id'] + 1
+
     expense = {
-        "id": len(expenses) + 1,
+        "id": expense_id,
         "description": description,
         "amount": amount,
         "date": datetime.now().strftime("%Y-%m-%d")
@@ -39,11 +57,17 @@ def list_expenses():
     for expense in expenses:
         print(f"# {expense['id']}   {expense['date']}  {expense['description']}        ${expense['amount']}")
 
-def delete_expense(id):
+def delete_expense(expense_id):
     expenses = load_expenses()
-    expenses = [expense for expense in expenses if expense["id"] != id]
+    if not expenses:
+        print("No expenses found.")
+
+    if not any(expense['id'] == expense_id for expense in expenses):
+        print(f"Expense with ID: {expense_id} not found.")
+        return
+    expenses = [expense for expense in expenses if expense["id"] != expense_id]
     save_expenses(expenses)
-    print(f"Expense of ID {id} deleted successfully")
+    print(f"Expense of ID {expense_id} deleted successfully")
 
 def update_expense(id, description, amount):
     expenses = load_expenses()
